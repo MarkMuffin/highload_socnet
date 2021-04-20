@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <form method="get">
+            {% csrf_token %}
+            <div class="col-md-8">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        {% if error_message %}
+                            <p class="bg-danger p-d ml-b">{{ error_message }}</p>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Username</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ username }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ first_name }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Last name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ last_name }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Age</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ age }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>City</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ city }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Interests</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ interests }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Friends</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ friends }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            {% for user in allusers %}
+                            {% if user not in request.user.friends.all and user != request.user %}
+                            <h1>{{user.username}} <a href="/send_friend_request/{{user.id}}/">Send friend request</a></h1>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-12">
+                            {% for friend_request in all_friends_requests %}
+                            {% if request.user == friend_request.to_user %}
+                            <h1>{{friend_request.from_user}}
+                                <a href="/accept_friend_request/{{friend_request.id}}/">Accept friend request</a>
+                            </h1>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
